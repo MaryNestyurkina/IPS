@@ -60,23 +60,23 @@ int *CompareForAndCilk_For(size_t sz)
 	cout << "The result of the function CompareForAndCilk_For()" << endl;
 
 	duration<double> duration, /// Перемнная для измерения времени работы цикла for
-					durationCilk; /// Перемнная для измерения времени работы цикла cilk_for
+		durationCilk; /// Перемнная для измерения времени работы цикла cilk_for
 	cilk::reducer<cilk::op_vector<int>>red_vec; /// Заполняемый вектор в цикле cilk_for
-	int *mass = new int[sz];
+	vector <int> vec;/// Заполняемый вектор в цикле for
 
 	/// Измеряем время работы цикла for
 	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 	for (long i = 0; i < sz; ++i)
 	{
-		mass[i] = (rand() % 25000) + 1;
+		vec.push_back(rand() % 25000 + 1);
 	}
 	high_resolution_clock::time_point t2 = high_resolution_clock::now();
 	duration = (t2 - t1);
 	// Измеряем время работы цикла cilk_for
 	high_resolution_clock::time_point t3 = high_resolution_clock::now();
-	cilk_for(long i = 0; i < sz; ++i)
+	cilk_for(long i = 0; i != sz; ++i)
 	{
-		red_vec->push_back(rand() % 20000 + 1);
+		red_vec->push_back(rand() % 25000 + 1);
 	}
 	int k = 0;
 	high_resolution_clock::time_point t4 = high_resolution_clock::now();
@@ -87,7 +87,7 @@ int *CompareForAndCilk_For(size_t sz)
 	cout << "Duration is: " << durationCilk.count() << " seconds (cilk_for loop)" << endl;
 	cout << endl;
 
-	return mass;
+	return 0;
 }
 
 int main()
@@ -98,16 +98,18 @@ int main()
 	__cilkrts_set_param("nworkers", "4");
 
 	/// Задаем размерность массива
-	size_t sz; 
+	size_t sz;
 	cout << "Specify the size of the array: ";
 	cin >> sz;
 
 	int *mass_begin, *mass_end;
 	int *mass = new int[sz];
-	mass = CompareForAndCilk_For(sz);
 	mass_begin = mass;
 	mass_end = mass_begin + sz;
-
+	for (long i = 0; i < sz; ++i)
+	{
+		mass[i] = (rand() % 25000) + 1;
+	}
 	/// Задание - поиск минимального элемента массива
 	/// Чтобы проверить работу функции ReducerMinTest(),
 	/// сравним результаты с ReducerMaxTest()
@@ -129,7 +131,8 @@ int main()
 	ReducerMinTest(mass, sz);
 	/// Выводим время работы функции ParallelSort()
 	cout << "Duration is: " << duration.count() << " seconds (function ParallelSort())" << endl;
-
+	cout << endl;
+	CompareForAndCilk_For(sz);
 
 	delete[]mass;
 	system("pause");
