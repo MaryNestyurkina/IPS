@@ -78,7 +78,6 @@ int *CompareForAndCilk_For(size_t sz)
 	{
 		red_vec->push_back(rand() % 25000 + 1);
 	}
-	int k = 0;
 	high_resolution_clock::time_point t4 = high_resolution_clock::now();
 	durationCilk = (t4 - t3);
 
