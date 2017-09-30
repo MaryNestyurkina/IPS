@@ -111,7 +111,8 @@ int main()
 	}
 	/// Задание - поиск минимального элемента массива
 	/// Чтобы проверить работу функции ReducerMinTest(),
-	/// сравним результаты с ReducerMaxTest()
+	/// сравним результаты с ReducerMaxTest() - смотрим на индексы
+	/// максимального и минимального элемента
 
 	duration<double> duration; /// Перемнная для измерения времени
 
@@ -126,11 +127,13 @@ int main()
 	duration = (t2 - t1);
 
 	/// Задание  - поиск минимального элемента после сортировки массива
-	ReducerMaxTest(mass, sz);
-	ReducerMinTest(mass, sz);
+	ReducerMaxTest(mass, sz); /// Поиск максимального элемента массива
+	ReducerMinTest(mass, sz); /// Поиск минимального элемента массива
 	/// Выводим время работы функции ParallelSort()
 	cout << "Duration is: " << duration.count() << " seconds (function ParallelSort())" << endl;
 	cout << endl;
+	
+	/// Задание - сравнение времени работы циклов for и cilk_for
 	CompareForAndCilk_For(sz);
 
 	delete[]mass;
